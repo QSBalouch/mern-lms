@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import Loader from "../components/Loader";
+import { deleteCourse } from "../services/courseService";
 
 function Courses() {
   const [courses, setCourses] = useState([]);
@@ -26,10 +27,17 @@ function Courses() {
 
   const loadMyCourses = async () => {
     setLoading(true);
+
     if (user?.role === "student") {
       const res = await myCourses();
-      setEnrolledCourses(res.data.map(c => c.course._id));
+
+      const filtered = res.data
+        .filter(c => c.course)   
+        .map(c => c.course._id); 
+
+      setEnrolledCourses(filtered);
     }
+
     setLoading(false);
   };
 
@@ -39,6 +47,16 @@ function Courses() {
     loadMyCourses();
     toast.success("Enrolled successfully!");
     setLoading(false);
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this course?")) {
+      setLoading(true);
+      await deleteCourse(id);
+      toast.success("Course deleted by admin");
+      loadCourses();
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -102,9 +120,24 @@ function Courses() {
                     )}
 
                     {user?.role === "admin" && (
-                      <Button as={Link} to={`/course/${c._id}`} variant="primary" className="w-100">
-                        View
-                      </Button>
+                      <>
+                        <Button
+                          as={Link}
+                          to={`/course/${c._id}`}
+                          variant="primary"
+                          className="w-100"
+                        >
+                          View
+                        </Button>
+
+                        <Button
+                          variant="danger"
+                          className="w-100 mt-2"
+                          onClick={() => handleDelete(c._id)}
+                        >
+                          Delete
+                        </Button>
+                      </>
                     )}
                   </div>
                 </Card.Body>

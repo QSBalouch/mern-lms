@@ -12,7 +12,7 @@ export const createLesson = async (req, res, next) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    // ✅ Only instructor owner can add lesson
+    // Only instructor owner can add lesson
     if (
       course.instructor.toString() !== req.user._id.toString()
     ) {

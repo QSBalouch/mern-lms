@@ -5,7 +5,7 @@ export const enrollCourse = async (req, res, next) => {
   try {
     const { courseId } = req.body;
 
-    // ✅ Check if already enrolled
+    // Check if already enrolled
     const exists = await Enrollment.findOne({
       student: req.user._id,
       course: courseId,
@@ -32,48 +32,59 @@ export const myCourses = async (req, res, next) => {
       student: req.user._id,
     }).populate("course");
 
-    res.json(courses);
+    const filtered = courses.filter(c => c.course !== null);
+
+    res.json(filtered);
   } catch (error) {
     next(error);
   }
 };
 
-export const getInstructorStudents = async (req, res, next) => {
+export const getInstructorStudents = async (req, res) => {
   try {
+    // 1. Get instructor courses
     const courses = await Course.find({ instructor: req.user._id });
 
-    const courseIds = courses.map((c) => c._id);
+    const courseIds = courses.map(c => c._id);
 
-    const result = await Enrollment.aggregate([
-      { $match: { course: { $in: courseIds } } },
-      { $group: { _id: "$student" } },
-      { $count: "totalStudents" },
-    ]);
+    // 2. Get enrollments of those courses
+    const enrollments = await Enrollment.find({
+      course: { $in: courseIds }
+    }).populate("student");
 
-    res.json({ count: result[0]?.totalStudents || 0 });
+    // 3. Get unique students
+    const uniqueStudents = [
+      ...new Map(
+        enrollments.map(e => [e.student._id.toString(), e.student])
+      ).values()
+    ];
+
+    res.json({ count: uniqueStudents.length });
+
   } catch (error) {
-    next(error);
+    console.error(error);
+    res.status(500).json({ message: "Error fetching students" });
   }
 };
 
-export const getInstructorStudentsList = async (req, res, next) => {
+export const getInstructorStudentsList = async (req, res) => {
   try {
     const courses = await Course.find({ instructor: req.user._id });
-
-    const courseIds = courses.map((c) => c._id);
+    const courseIds = courses.map(c => c._id);
 
     const enrollments = await Enrollment.find({
-      course: { $in: courseIds },
-    }).populate("student", "name email");
+      course: { $in: courseIds }
+    }).populate("student");
 
-    const uniqueMap = new Map();
+    const uniqueStudents = [
+      ...new Map(
+        enrollments.map(e => [e.student._id.toString(), e.student])
+      ).values()
+    ];
 
-    enrollments.forEach((e) => {
-      uniqueMap.set(e.student._id.toString(), e.student);
-    });
+    res.json(uniqueStudents);
 
-    res.json(Array.from(uniqueMap.values()));
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: "Error fetching students list" });
   }
 };

@@ -68,10 +68,8 @@ function Profile() {
     }
 
     // INSTRUCTOR
-    // INSTRUCTOR
     else if (user.role === "instructor") {
       setLoading(true);
-      // 1. Get instructor courses (same as before)
       API.get("/courses").then((res) => {
         const myCourses = res.data.filter(
           (c) => c.instructor._id === user._id
@@ -80,9 +78,8 @@ function Profile() {
         setLoading(false);
       });
 
-      // 2. NEW: Get total students from backend
       setLoading(true);
-      API.get("/enrollment/instructor/students")
+      API.get("/instructor/students")
         .then((res) => {
           setUniqueStudents(res.data.count);
         })
@@ -149,7 +146,7 @@ function Profile() {
               {user.role === "admin" && (
                 <>
                   <Button variant="outline-primary" as={Link} to="/admin/users">Manage Users</Button>
-                  <Button variant="outline-primary" as={Link} to="/courses">View Courses</Button>
+                  <Button variant="outline-primary" as={Link} to="/courses">Manage Courses</Button>
                 </>
               )}
 

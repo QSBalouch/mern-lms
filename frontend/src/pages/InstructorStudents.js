@@ -9,7 +9,7 @@ function InstructorStudents() {
 
   useEffect(() => {
     setLoading(true);
-    API.get("/enrollment/instructor/students-list")
+    API.get("/instructor/students-list")
       .then((res) => setStudents(res.data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));

@@ -41,21 +41,23 @@ export const getMyProgress = async (req, res, next) => {
     });
 
     const result = await Promise.all(
-      enrollments.map(async (enroll) => {
-        const progress = progressRecords.find(
-          (p) => p.course.toString() === enroll.course._id.toString()
-        );
+        enrollments
+        .filter(enroll => enroll.course)
+        .map(async (enroll) => {
+          const progress = progressRecords.find(
+            (p) => p.course.toString() === enroll.course._id.toString()
+          );
 
-        const totalLessons = await Lesson.countDocuments({
-          course: enroll.course._id,
-        });
+          const totalLessons = await Lesson.countDocuments({
+            course: enroll.course._id,
+          });
 
-        return {
-          course: enroll.course,
-          completedLessons: progress ? progress.completedLessons : [],
-          totalLessons,
-        };
-      })
+          return {
+            course: enroll.course,
+            completedLessons: progress ? progress.completedLessons : [],
+            totalLessons,
+          };
+        })
     );
 
     res.json(result);

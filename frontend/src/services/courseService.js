@@ -3,28 +3,28 @@ import API from "./api";
 
 // Courses
 export const getCourses = () => {
-  return API.get("/courses"); // Public route
+  return API.get("/courses"); 
 };
 
 export const getCourse = (id) => {
-  return API.get(`/courses/${id}`); // Public route
+  return API.get(`/courses/${id}`); 
 };
 
 export const createCourse = (data) => {
-  return API.post("/courses", data); // Protected route (Instructor/Admin)
+  return API.post("/courses", data); 
 };
 
 export const deleteCourse = (id) => {
-  return API.delete(`/courses/${id}`); // Protected route (Instructor/Admin)
+  return API.delete(`/courses/${id}`); 
 };
 
 // Enrollment (Student)
 export const enrollCourse = (courseId) => {
-  return API.post("/enrollment/enroll", { courseId }); // Protected
+  return API.post("/enroll", { courseId }); 
 };
 
 export const myCourses = () => {
-  return API.get("/enrollment/my-courses"); // Protected
+  return API.get("/my-courses"); 
 };
 
 export const updateCourse = (id, data) => {

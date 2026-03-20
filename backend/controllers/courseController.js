@@ -1,4 +1,7 @@
 import Course from "../models/Course.js";
+import Enrollment from "../models/Enrollment.js";
+import Lesson from "../models/Lesson.js";
+import Progress from "../models/Progress.js";
 
 export const getCourses = async (req, res, next) => {
   try {
@@ -14,7 +17,7 @@ export const getCourse = async (req, res, next) => {
     const course = await Course.findById(req.params.id).populate("instructor", "name");
 
     if (!course) {
-      return res.status(404).json({ message: "Course not found" });  
+      return res.status(404).json({ message: "Course not found" });
     }
 
     res.json(course);
@@ -41,7 +44,7 @@ export const createCourse = async (req, res, next) => {
   }
 };
 
-export const deleteCourse = async (req, res, next) => {
+export const deleteCourse = async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
 
@@ -49,21 +52,21 @@ export const deleteCourse = async (req, res, next) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    // ✅ Ownership check
-    if (
-      course.instructor.toString() !== req.user._id.toString() &&
-      req.user.role !== "admin"
-    ) {
-      return res.status(403).json({ message: "Not allowed" });
-    }
+    // Delete related enrollments
+    await Enrollment.deleteMany({ course: course._id });
+
+    // Delete related lessons
+    await Lesson.deleteMany({ course: course._id });
 
     await course.deleteOne();
 
-    res.json({ message: "Course deleted" });
+    res.json({ message: "Course deleted successfully" });
+
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: "Error deleting course" });
   }
 };
+
 
 export const updateCourse = async (req, res, next) => {
   try {
@@ -75,7 +78,7 @@ export const updateCourse = async (req, res, next) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    // ✅ Ownership check
+    // Ownership check
     if (
       course.instructor.toString() !== req.user._id.toString() &&
       req.user.role !== "admin"

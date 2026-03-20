@@ -8,7 +8,7 @@ export const createAdminIfNotExists = async () => {
     const existingAdmin = await User.findOne({ email: adminEmail, role: "admin" });
 
     if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash("AdminPassword123", 10); 
+      const hashedPassword = await bcrypt.hash("AdminPassword123", 10);
       await User.create({
         name: "Admin User",
         email: adminEmail,

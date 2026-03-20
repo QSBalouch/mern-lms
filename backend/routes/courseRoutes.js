@@ -1,12 +1,12 @@
 import express from "express";
 
 import {
-getCourses,
-getCourse,
-createCourse,
-deleteCourse,
-updateCourse,
-getInstructorCourses
+  getCourses,
+  getCourse,
+  createCourse,
+  deleteCourse,
+  updateCourse,
+  getInstructorCourses
 } from "../controllers/courseController.js";
 
 import protect from "../middleware/authMiddleware.js";
@@ -14,18 +14,18 @@ import authorizeRoles from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
-router.get("/",getCourses);
+router.get("/", getCourses);
 
-router.get("/:id",getCourse);
+router.get("/:id", getCourse);
 
-router.post("/",protect,authorizeRoles("instructor","admin"),createCourse);
+router.post("/", protect, authorizeRoles("instructor", "admin"), createCourse);
 
-router.delete("/:id",protect,authorizeRoles("instructor","admin"),deleteCourse);
+router.delete("/:id", protect, authorizeRoles("instructor", "admin"), deleteCourse);
 
 router.put("/:id",
-protect,
-authorizeRoles("instructor","admin"),
-updateCourse
+  protect,
+  authorizeRoles("instructor", "admin"),
+  updateCourse
 );
 
 router.get(

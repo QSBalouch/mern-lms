@@ -31,29 +31,31 @@ function StudentDashboard() {
             <h2>My Courses</h2>
 
             <div className="course-grid mt-3">
-                {courses.map((c) => (
+                {courses
+                    .filter(c => c.course)
+                    .map((c) => (
 
-                    <Card key={c._id} className="dashboard-card mb-4">
+                        <Card key={c._id} className="dashboard-card mb-4">
 
-                        <Card.Body>
+                            <Card.Body>
 
-                            <h5>{c.course.title}</h5>
+                                <h5>{c.course.title}</h5>
 
-                            <p>{c.course.description}</p>
+                                <p>{c.course.description}</p>
 
-                            <Button
-                                as={Link}
-                                to={`/course/${c.course._id}`}
-                                variant="primary"
-                            >
-                                Open Course
-                            </Button>
+                                <Button
+                                    as={Link}
+                                    to={`/course/${c.course._id}`}
+                                    variant="primary"
+                                >
+                                    Open Course
+                                </Button>
 
-                        </Card.Body>
+                            </Card.Body>
 
-                    </Card>
+                        </Card>
 
-                ))}
+                    ))}
             </div>
 
         </Container>

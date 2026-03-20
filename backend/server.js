@@ -24,10 +24,10 @@ app.use(express.json());
 app.use(errorHandler);
 
 // Routes
-app.use("/api/auth", authRoutes);
+app.use("/api", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/enrollment", enrollmentRoutes);
+app.use("/api", enrollmentRoutes);
 app.use("/api/lessons", lessonRoutes);
 app.use("/api/progress", progressRoutes);
 
