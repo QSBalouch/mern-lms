@@ -48,6 +48,8 @@ This platform supports students, instructors, and admins with features like cour
 
 ## 📁 Project Structure
 
+```
+
 project-root/  
 │  
 ├── backend/  
@@ -121,7 +123,8 @@ project-root/
 │   │   └── index.css  
 │   └── .env  
 
----
+```
+
 
 ## ⚙️ Installation & Setup
 
