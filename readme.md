@@ -53,7 +53,7 @@ project-root/
 ├── backend/  
 │   ├── config/  
 │   │   ├── .env 
-│   │   ├── db.js 
+│   │   ├── db.js  
 │   ├── controllers/ 
 │   │   ├── authController.js 
 │   │   ├── courseController.js 
