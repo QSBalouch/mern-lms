@@ -85,6 +85,8 @@ project-root/
 │   │   ├── generateToken.js
 │   └── server.js   
 │  
+├── api/ 
+│   └── server.js 
 ├── frontend/  
 │   ├── src/  
 │   │   ├── components/
@@ -122,6 +124,8 @@ project-root/
 │   │   └── index.js
 │   │   └── index.css  
 │   └── .env  
+├── vercel.json 
+
 
 ```
 
