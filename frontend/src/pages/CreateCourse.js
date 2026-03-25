@@ -32,7 +32,7 @@ function CreateCourse() {
 
   return (
     <Container className="mt-5" style={{ maxWidth: "600px" }}>
-      <h2>Create New Course</h2>
+      <h2 className="mb-4 text-center">Create New Course</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Title</Form.Label>

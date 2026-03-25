@@ -1,25 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Container,
-  Card,
-  Row,
-  Col,
-  ProgressBar,
-  Table,
-  Button,
-} from "react-bootstrap";
+import { Container, Card, Row, Col, ProgressBar, Table, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import API from "../services/api";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import Loader from "../components/Loader";
 
 function Profile() {
@@ -45,58 +29,63 @@ function Profile() {
   useEffect(() => {
     if (!user) return;
 
-    // STUDENT
-    if (user.role === "student") {
+    const fetchDashboardData = async () => {
       setLoading(true);
-      API.get("/progress/my-progress").then((res) => {
-        const data = res.data;
-        setCourses(data);
+      try {
+        if (user.role === "student") {
+          const res = await API.get("/progress/my-progress");
+          const data = res.data;
+          setCourses(data);
 
-        const totalLessons = data.reduce((sum, c) => sum + c.totalLessons, 0);
-        const completedLessons = data.reduce(
-          (sum, c) => sum + c.completedLessons.length,
-          0
-        );
+          const totalLessons = data.reduce(
+            (sum, c) => sum + c.totalLessons,
+            0
+          );
 
-        const prog = totalLessons
-          ? Math.round((completedLessons / totalLessons) * 100)
-          : 0;
+          const completedLessons = data.reduce(
+            (sum, c) => sum + c.completedLessons.length,
+            0
+          );
 
-        setOverallProgress(prog);
+          const prog = totalLessons
+            ? Math.round((completedLessons / totalLessons) * 100)
+            : 0;
+
+          setOverallProgress(prog);
+        }
+
+        else if (user.role === "instructor") {
+          const [coursesRes, studentsRes] = await Promise.all([
+            API.get("/courses"),
+            API.get("/instructor/students"),
+          ]);
+
+          const myCourses = coursesRes.data.filter(
+            (c) => c.instructor._id === user._id
+          );
+
+          setCourses(myCourses);
+          setUniqueStudents(studentsRes.data.count);
+        }
+
+        else if (user.role === "admin") {
+          const [usersRes, coursesRes] = await Promise.all([
+            API.get("/users"),
+            API.get("/courses"),
+          ]);
+
+          setUsersCount(usersRes.data.length);
+          setCourses(coursesRes.data);
+        }
+      } catch (error) {
+        console.error("Dashboard Error:", error);
+      } finally {
         setLoading(false);
-      });
-    }
+      }
+    };
 
-    // INSTRUCTOR
-    else if (user.role === "instructor") {
-      setLoading(true);
-      API.get("/courses").then((res) => {
-        const myCourses = res.data.filter(
-          (c) => c.instructor._id === user._id
-        );
-        setCourses(myCourses);
-        setLoading(false);
-      });
+    fetchDashboardData();
 
-      setLoading(true);
-      API.get("/instructor/students")
-        .then((res) => {
-          setUniqueStudents(res.data.count);
-        })
-        .catch((err) => {
-          console.error(err);
-        })
-        .finally(() => setLoading(false));
-
-    }
-
-    // ADMIN
-    else if (user.role === "admin") {
-      setLoading(true);
-      API.get("/users").then((res) => setUsersCount(res.data.length));
-      API.get("/courses").then((res) => setCourses(res.data));
-      setLoading(false);
-    }
   }, [user]);
 
   if (!user) return null;
@@ -108,7 +97,7 @@ function Profile() {
       <Row style={{ height: "88vh" }}>
 
         {/* LEFT PANEL */}
-        <Col md={3} className="d-flex">
+        <Col md={3} className="d-flex mb-3">
           <Card className="w-100 text-center p-4 d-flex flex-column">
 
             <img
@@ -244,7 +233,7 @@ function Profile() {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="value" fill="#0d8abc"/>
+                    <Bar dataKey="value" fill="#0d8abc" />
                   </BarChart>
                 </ResponsiveContainer>
               </Card>
@@ -279,7 +268,7 @@ function Profile() {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="value" fill="#0d8abc"/>
+                    <Bar dataKey="value" fill="#0d8abc" />
                   </BarChart>
                 </ResponsiveContainer>
               </Card>

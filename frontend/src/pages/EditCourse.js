@@ -21,66 +21,59 @@ function EditCourse() {
     }, []);
 
     const loadCourse = async () => {
-        setLoading(true);
-        const res = await getCourse(id);
-        setTitle(res.data.title);
-        setDescription(res.data.description);
-        setCategory(res.data.category);
-        setPrice(res.data.price);
-        setLoading(false);
+        try {
+            setLoading(true);
+            const res = await getCourse(id);
+            setTitle(res.data.title);
+            setDescription(res.data.description);
+            setCategory(res.data.category);
+            setPrice(res.data.price);
+        } catch (error) {
+            toast.error(error?.response?.data?.message || "Error Loading course");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        await updateCourse(id, {
-            title,
-            description,
-            category,
-            price
-        });
-
-        toast.success("Course updated");
-        navigate("/instructor/courses");
-        setLoading(false);
+        try {
+            setLoading(true);
+            await updateCourse(id, { title, description, category, price });
+            toast.success("Course updated");
+            navigate("/instructor/courses");
+        } catch (error) {
+            toast.error(error?.response?.data?.message || "Error Updating course");
+        } finally {
+            setLoading(false);
+        }
     };
 
     if (loading) return <Loader />;
 
     return (
-
         <Container className="mt-4">
-
             <h2>Edit Course</h2>
-
             <Form onSubmit={handleSubmit}>
-
                 <Form.Group className="mb-3">
                     <Form.Label>Title</Form.Label>
                     <Form.Control value={title} onChange={(e) => setTitle(e.target.value)} />
                 </Form.Group>
-
                 <Form.Group className="mb-3">
                     <Form.Label>Description</Form.Label>
                     <Form.Control value={description} onChange={(e) => setDescription(e.target.value)} />
                 </Form.Group>
-
                 <Form.Group className="mb-3">
                     <Form.Label>Category</Form.Label>
                     <Form.Control value={category} onChange={(e) => setCategory(e.target.value)} />
                 </Form.Group>
-
                 <Form.Group className="mb-3">
                     <Form.Label>Price</Form.Label>
                     <Form.Control type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
                 </Form.Group>
-
                 <Button type="submit">Update</Button>
-
             </Form>
-
         </Container>
-
     );
 
 }

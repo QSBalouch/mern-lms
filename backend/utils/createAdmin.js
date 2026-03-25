@@ -1,10 +1,9 @@
-// backend/utils/createAdmin.js
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 
 export const createAdminIfNotExists = async () => {
   try {
-    const adminEmail = "admin@example.com"; // change if you want
+    const adminEmail = "admin@example.com"; 
     const existingAdmin = await User.findOne({ email: adminEmail, role: "admin" });
 
     if (!existingAdmin) {

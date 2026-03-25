@@ -22,40 +22,40 @@ function EditLesson() {
     }, [id]);
 
     const loadLesson = async () => {
-        setLoading(true);
-        const res = await API.get(`/lessons/lesson/${id}`);
-
-        setTitle(res.data.title);
-        setDescription(res.data.description);
-        setVideoUrl(res.data.videoUrl);
-        setLoading(false);
+        try {
+            setLoading(true);
+            const res = await API.get(`/lessons/lesson/${id}`);
+            setTitle(res.data.title);
+            setDescription(res.data.description);
+            setVideoUrl(res.data.videoUrl);
+            setLoading(false);
+        } catch (error) {
+            toast.error(error?.response?.data?.message || "Error Loading lesson");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        await updateLesson(id, {
-            title,
-            description,
-            videoUrl
-        });
-
-        toast.success("Lesson updated");
-
-        navigate(-1);
-        setLoading(false);
+        try { 
+            setLoading(true);
+            await updateLesson(id, { title, description, videoUrl });
+            toast.success("Lesson updated");
+            navigate(-1);
+        } catch (error) {
+            toast.error(error?.response?.data?.message || "Error Updating lesson");
+        } finally {
+            setLoading(false);
+        }
     };
 
     if (loading) return <Loader />;
 
     return (
-
         <Container className="mt-4">
-
             <h2>Edit Lesson</h2>
-
             <Form onSubmit={handleSubmit}>
-
                 <Form.Group className="mb-3">
                     <Form.Label>Title</Form.Label>
                     <Form.Control
@@ -63,7 +63,6 @@ function EditLesson() {
                         onChange={(e) => setTitle(e.target.value)}
                     />
                 </Form.Group>
-
                 <Form.Group className="mb-3">
                     <Form.Label>Description</Form.Label>
                     <Form.Control
@@ -72,7 +71,6 @@ function EditLesson() {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </Form.Group>
-
                 <Form.Group className="mb-3">
                     <Form.Label>Video URL</Form.Label>
                     <Form.Control
@@ -80,17 +78,12 @@ function EditLesson() {
                         onChange={(e) => setVideoUrl(e.target.value)}
                     />
                 </Form.Group>
-
                 <Button type="submit">
                     Update Lesson
                 </Button>
-
             </Form>
-
         </Container>
-
     );
-
 }
 
 export default EditLesson;

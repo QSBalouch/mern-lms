@@ -18,7 +18,6 @@ This platform supports students, instructors, and admins with features like cour
 - Create, update, and delete courses  
 - Add and manage lessons  
 - View enrolled students  
-- Access course-related analytics  
 
 ### 🛡️ Admin
 - Manage users  
@@ -53,24 +52,73 @@ project-root/
 │  
 ├── backend/  
 │   ├── config/  
-│   ├── controllers/  
+│   │   ├── .env 
+│   │   ├── db.js 
+│   ├── controllers/ 
+│   │   ├── authController.js 
+│   │   ├── courseController.js 
+│   │   ├── enrollmentController.js 
+│   │   ├── lessonController.js 
+│   │   ├── progressController.js 
+│   │   ├── userController.js 
 │   ├── middleware/  
-│   ├── models/  
+│   │   ├── authMiddleware.js
+│   │   ├── errorMiddleware.js
+│   │   ├── roleMiddleware.js
+│   ├── models/ 
+│   │   ├── Course.js  
+│   │   ├── Enrollment.js  
+│   │   ├── Lesson.js  
+│   │   ├── Progress.js  
+│   │   ├── User.js  
 │   ├── routes/  
+│   │   ├── authRoutes.js
+│   │   ├── courseRoutes.js
+│   │   ├── enrollmentRoutes.js
+│   │   ├── lessonRoutes.js
+│   │   ├── progressRoutes.js
+│   │   ├── userRoutes.js
 │   ├── utils/  
-│   ├── server.js  
-│   └── .env  
+│   │   ├── createAdmin.js
+│   │   ├── generateToken.js
+│   └── server.js   
 │  
 ├── frontend/  
 │   ├── src/  
-│   │   ├── components/  
+│   │   ├── components/
+│   │   │   ├── CourseCard.js  
+│   │   │   ├── Loader.js  
+│   │   │   ├── NavbarComponent.js  
+│   │   │   ├── ProtectedRoute.js  
 │   │   ├── context/  
-│   │   ├── dashboards/  
+│   │   │   ├── AuthContext.js
+│   │   ├── dashboards/
+│   │   │   ├── InstructorCourses.js   
+│   │   │   ├── ManageUsers.js   
+│   │   │   ├── StudentCourses.js   
 │   │   ├── pages/  
+│   │   │   ├── Home.js  
+│   │   │   ├── About.js 
+│   │   │   ├── Login.js
+│   │   │   ├── Register.js
+│   │   │   ├── Profile.js
+│   │   │   ├── Courses.js
+│   │   │   ├── CourseDetail.js  
+│   │   │   ├── CreateCourse.js 
+│   │   │   ├── CreateLesson.js 
+│   │   │   ├── EditCourse.js 
+│   │   │   ├── EditLesson.js 
+│   │   │   ├── InstructorStudents.js 
 │   │   ├── services/  
-│   │   ├── routes/  
+│   │   │   ├── api.js
+│   │   │   ├── authService.js
+│   │   │   ├── courseService.js
+│   │   │   ├── progressiveService.js
+│   │   ├── routes/ 
+│   │   │   ├── AppRoutes.js 
 │   │   ├── App.js  
-│   │   └── index.js  
+│   │   └── index.js
+│   │   └── index.css  
 │   └── .env  
 
 ---
@@ -132,29 +180,31 @@ POST /api/login → Login user
 ### Courses
 GET /api/courses → Get all courses  
 GET /api/courses/:id → Get single course  
-POST /api/courses → Create course  
-PUT /api/courses/:id → Update course  
-DELETE /api/courses/:id → Delete course  
+POST /api/courses → Create course  (Instructor)
+PUT /api/courses/:id → Update course (Instructor)
+DELETE /api/courses/:id → Delete course (Instructor + Admin)
+GET /api/courses/instructor/my-courses → Managing Course (Instructor)
 
 ### Lessons
-POST /api/lessons → Create lesson  
+POST /api/lessons → Create lesson  (Instructor)
 GET /api/lessons/:courseId → Get lessons  
 GET /api/lessons/lesson/:id → Get single lesson  
-PUT /api/lessons/:id → Update lesson  
+PUT /api/lessons/:id → Update lesson  (Instructor)
+DELETE /api/lessons/:id → Delete lesson (Instructor)
 
 ### Enrollment
-POST /api/enroll → Enroll in course  
-GET /api/my-courses → Get enrolled courses  
-GET /api/instructor/students → Get student count  
-GET /api/instructor/students-list → Get student list  
+POST /api/enroll → Enroll in course  (Student)
+GET /api/my-courses → Get enrolled courses  (Student)
+GET /api/instructor/students → Get student count  (Instructor)
+GET /api/instructor/students-list → Get student list  (Instructor)
 
 ### Progress
-POST /api/progress/complete → Mark lesson complete  
-GET /api/progress/my-progress → Get progress  
+POST /api/progress/complete → Mark lesson complete  (Student)
+GET /api/progress/my-progress → Get progress  (Student)
 
 ### Users (Admin)
-GET /api/users → Get all users  
-DELETE /api/users/:id → Delete user  
+GET /api/users → Get all users  (Admin)
+DELETE /api/users/:id → Delete user  (Admin)
 
 ---
 
@@ -167,7 +217,8 @@ DELETE /api/users/:id → Delete user
 - Instructor dashboards  
 - Admin controls  
 - Role-based authorization  
-- Secure JWT authentication  
+- Secure JWT authentication 
+- Responsiveness 
 
 ---
 

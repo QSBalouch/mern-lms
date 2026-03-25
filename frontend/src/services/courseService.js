@@ -1,4 +1,3 @@
-// frontend/src/services/courseService.js
 import API from "./api";
 
 // Courses
@@ -37,4 +36,8 @@ export const createLesson = (data) => {
 
 export const updateLesson = (id,data)=>{
 return API.put(`/lessons/${id}`,data);
+};
+
+export const deleteLesson = (id) => {
+  return API.delete(`/lessons/${id}`); 
 };

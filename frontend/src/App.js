@@ -8,21 +8,13 @@ import { AuthProvider } from "./context/AuthContext";
 function App() {
 
     return (
-
         <AuthProvider>
-
             <BrowserRouter>
-
                 <NavbarComponent />
-
                 <AppRoutes />
-
                 <ToastContainer />
-
             </BrowserRouter>
-
         </AuthProvider>
-
     )
 
 }

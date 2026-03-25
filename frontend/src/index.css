@@ -180,7 +180,30 @@ video {
   border: 1px solid rgba(255,255,255,0.3);
 }
 
+/* Mobile Sidebar */
+.offcanvas {
+  background-color: #343a40 !important;
+  color: white;
+}
 
+.offcanvas .nav-link {
+  color: white !important;
+  padding: 12px 0;
+  font-size: 16px;
+}
+
+.offcanvas .nav-link:hover {
+  padding-left: 10px;
+  transition: 0.2s ease;
+}
+
+.offcanvas-header {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.offcanvas-title {
+  font-weight: 700;
+}
 
 /* ----------------------------- Responsive Adjustments ----------------------------- */
 @media (max-width: 768px) {
@@ -190,5 +213,18 @@ video {
 
   .form-control {
     height: 45px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table td, 
+  .table th {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .btn-sm {
+    padding: 3px 6px;
+    font-size: 12px;
   }
 }

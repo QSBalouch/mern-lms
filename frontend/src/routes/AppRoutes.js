@@ -8,7 +8,7 @@ import CourseDetail from "../pages/CourseDetail";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 
-import StudentDashboard from "../dashboards/StudentDashboard";
+import StudentCourses from "../dashboards/StudentCourses";
 import InstructorCourses from "../dashboards/InstructorCourses";
 import ManageUsers from "../dashboards/ManageUsers";
 import ProtectedRoute from "../components/ProtectedRoute";
@@ -46,7 +46,7 @@ function AppRoutes() {
             {/* Student */}
             <Route path="/student" element={
                 <ProtectedRoute role="student">
-                    <StudentDashboard />
+                    <StudentCourses />
                 </ProtectedRoute>
             } />
 

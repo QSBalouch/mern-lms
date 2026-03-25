@@ -49,6 +49,20 @@ function CourseDetail() {
     }
   };
 
+  const deleteLesson = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this lesson?")) return;
+    try {
+      setLoading(true);
+      await API.delete(`/lessons/${id}`); 
+      toast.success("Lesson deleted");
+      await loadLessons();
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to delete lesson");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Check if student is enrolled
   const checkEnrollment = async () => {
     if (user?.role === "student") {
@@ -62,7 +76,7 @@ function CourseDetail() {
         setLoading(false);
       }
     } else {
-      setIsEnrolled(true); 
+      setIsEnrolled(true);
     }
   };
 
@@ -128,20 +142,41 @@ function CourseDetail() {
 
                 {/* Edit button only for instructor */}
                 {user?.role === "instructor" && (
-                  <Button
-                    as={Link}
-                    to={`/lessons/edit/${l._id}`}
-                    variant="warning"
-                    size="sm"
-                    className="mt-2"
-                  >
-                    Edit Lesson
-                  </Button>
+                  <>
+                    <Button
+                      as={Link}
+                      to={`/lessons/edit/${l._id}`}
+                      variant="warning"
+                      size="sm"
+                      className="mt-2 me-2"
+                    >
+                      Edit Lesson
+                    </Button>
+
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      className="mt-2"
+                      onClick={() => deleteLesson(l._id)}
+                    >
+                      Delete Lesson
+                    </Button></>
                 )}
               </Card.Body>
             </Card>
           ))}
         </>
+      )}
+
+      {user?.role === "instructor" && (
+        <Button
+          as={Link}
+          to={`/courses/${id}/add-lesson`}
+          variant="success"
+          className="w-100 mb-3"
+        >
+          Add New Lesson
+        </Button>
       )}
 
       {/* Message for students not enrolled */}

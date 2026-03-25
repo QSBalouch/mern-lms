@@ -5,12 +5,10 @@ import Enrollment from "../models/Enrollment.js";
 export const markLessonComplete = async (req, res, next) => {
   try {
     const { lessonId, courseId } = req.body;
-
     let progress = await Progress.findOne({
       user: req.user._id,
       course: courseId,
     });
-
     if (!progress) {
       progress = await Progress.create({
         user: req.user._id,
@@ -23,7 +21,6 @@ export const markLessonComplete = async (req, res, next) => {
         await progress.save();
       }
     }
-
     res.json(progress);
   } catch (error) {
     next(error);
@@ -35,11 +32,9 @@ export const getMyProgress = async (req, res, next) => {
     const enrollments = await Enrollment.find({
       student: req.user._id,
     }).populate("course");
-
     const progressRecords = await Progress.find({
       user: req.user._id,
     });
-
     const result = await Promise.all(
         enrollments
         .filter(enroll => enroll.course)
@@ -47,11 +42,9 @@ export const getMyProgress = async (req, res, next) => {
           const progress = progressRecords.find(
             (p) => p.course.toString() === enroll.course._id.toString()
           );
-
           const totalLessons = await Lesson.countDocuments({
             course: enroll.course._id,
           });
-
           return {
             course: enroll.course,
             completedLessons: progress ? progress.completedLessons : [],
@@ -59,7 +52,6 @@ export const getMyProgress = async (req, res, next) => {
           };
         })
     );
-
     res.json(result);
   } catch (error) {
     next(error);

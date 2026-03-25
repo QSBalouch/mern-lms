@@ -10,8 +10,9 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const { login, user } = useContext(AuthContext); 
+  const { login, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,13 +55,30 @@ function Login() {
 
         <Form.Group className="mb-3">
           <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+
+          <div style={{ position: "relative" }}>
+            <Form.Control
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ paddingRight: "40px" }}
+            />
+
+            <i
+              className={showPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"}
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: "12px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                color: "#6c757d"
+              }}
+            ></i>
+          </div>
         </Form.Group>
 
         <Button variant="success" type="submit" className="w-100">

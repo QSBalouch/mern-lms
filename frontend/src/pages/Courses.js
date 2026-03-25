@@ -8,53 +8,72 @@ import Loader from "../components/Loader";
 import { deleteCourse } from "../services/courseService";
 
 function Courses() {
+
   const [courses, setCourses] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [loading, setLoading] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
 
   const loadCourses = async () => {
-    setLoading(true);
-    const res = await getCourses();
-    if (user?.role === "instructor") {
-      const myCourses = res.data.filter(c => c.instructor._id === user._id);
-      setCourses(myCourses);
-    } else {
-      setCourses(res.data);
+    try {
+      setLoading(true);
+      const res = await getCourses();
+      if (user?.role === "instructor") {
+        const myCourses = res.data.filter(c => c.instructor._id === user._id);
+        setCourses(myCourses);
+      } else {
+        setCourses(res.data);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error loading courses");
+      setCourses([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const loadMyCourses = async () => {
-    setLoading(true);
+    try {
+      setLoading(true);
+      if (user?.role === "student") {
+        const res = await myCourses();
+        const filtered = res.data
+          .filter(c => c.course)
+          .map(c => c.course._id);
 
-    if (user?.role === "student") {
-      const res = await myCourses();
-
-      const filtered = res.data
-        .filter(c => c.course)   
-        .map(c => c.course._id); 
-
-      setEnrolledCourses(filtered);
+        setEnrolledCourses(filtered);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error loading courses");
+      setEnrolledCourses([]);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const handleEnroll = async (id) => {
-    setLoading(true);
-    await enrollCourse(id);
-    loadMyCourses();
-    toast.success("Enrolled successfully!");
-    setLoading(false);
+    try {
+      setLoading(true);
+      await enrollCourse(id);
+      loadMyCourses();
+      toast.success("Enrolled successfully!");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error enrolling in course");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this course?")) {
+    if (!window.confirm("Are you sure you want to delete this course?")) return;
+    try {
       setLoading(true);
       await deleteCourse(id);
       toast.success("Course deleted by admin");
       loadCourses();
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error deleting course");
+    } finally {
       setLoading(false);
     }
   };
