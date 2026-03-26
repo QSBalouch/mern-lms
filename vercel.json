@@ -16,7 +16,8 @@
       "dest": "backend/api/server.js"
     },
     {
-      "handle": "filesystem"
+      "src": "/static/(.*)",
+      "dest": "/frontend/build/static/$1"
     },
     {
       "src": "/(.*)",
