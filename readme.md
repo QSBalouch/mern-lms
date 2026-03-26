@@ -53,8 +53,7 @@ This platform supports students, instructors, and admins with features like cour
 project-root/  
 │  
 ├── backend/  
-│   ├── config/  
-│   │   ├── .env 
+│   ├── config/   
 │   │   ├── db.js  
 │   ├── controllers/ 
 │   │   ├── authController.js 
@@ -83,10 +82,10 @@ project-root/
 │   ├── utils/  
 │   │   ├── createAdmin.js
 │   │   ├── generateToken.js
-│   └── server.js   
-│  
-├── api/ 
-│   └── server.js 
+│   ├── api
+│   │   ├── server.js
+│   └── .env 
+│   
 ├── frontend/  
 │   ├── src/  
 │   │   ├── components/
