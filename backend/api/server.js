@@ -37,4 +37,5 @@ app.use(errorHandler);
 connectDB();
 createAdminIfNotExists();
 
+
 export default app;
