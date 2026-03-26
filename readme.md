@@ -5,6 +5,9 @@ This platform supports students, instructors, and admins with features like cour
 
 ---
 
+
+**Note: Vercel deploy link is: https://mern-lms-peach.vercel.app/ **
+
 ## 🚀 Features
 
 ### 👨‍🎓 Student
