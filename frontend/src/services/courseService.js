@@ -1,24 +1,33 @@
 import API from "./api";
 
 // Courses
-export const getCourses = () => {
+export const getAllCourses = () => {
   return API.get("/courses"); 
 };
 
-export const getCourse = (id) => {
+export const getCourseById = (id) => {
   return API.get(`/courses/${id}`); 
 };
 
-export const createCourse = (data) => {
+export const createNewCourse = (data) => {
   return API.post("/courses", data); 
 };
 
-export const deleteCourse = (id) => {
+export const deleteCourseById = (id) => {
   return API.delete(`/courses/${id}`); 
 };
 
+export const updateCourseById = (id, data) => {
+  return API.put(`/courses/${id}`, data);
+};
+
+export const getInstructorCourses = () => {
+  return API.get("/courses/instructor/my-courses");
+}
+ 
+
 // Enrollment (Student)
-export const enrollCourse = (courseId) => {
+export const enrollInCourse = (courseId) => {
   return API.post("/enroll", { courseId }); 
 };
 
@@ -26,18 +35,5 @@ export const myCourses = () => {
   return API.get("/my-courses"); 
 };
 
-export const updateCourse = (id, data) => {
-  return API.put(`/courses/${id}`, data);
-};
 
-export const createLesson = (data) => {
-  return API.post("/lessons", data);
-};
 
-export const updateLesson = (id,data)=>{
-return API.put(`/lessons/${id}`,data);
-};
-
-export const deleteLesson = (id) => {
-  return API.delete(`/lessons/${id}`); 
-};

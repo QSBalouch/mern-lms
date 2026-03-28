@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-import { createLesson } from "../services/courseService";
+import { createNewLesson } from "../services/lessonService";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
@@ -18,7 +18,7 @@ function CreateLesson() {
         e.preventDefault();
         try {
             setLoading(true);
-            await createLesson({title, description, videoUrl, courseId}); 
+            await createNewLesson({title, description, videoUrl, courseId}); 
             toast.success("Lesson added");
             navigate(`/course/${courseId}`);
         } catch (err) {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-import { createCourse } from "../services/courseService";
+import { createNewCourse } from "../services/courseService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
@@ -18,7 +18,7 @@ function CreateCourse() {
     e.preventDefault();
     try {
       setLoading(true);
-      await createCourse({ title, description, category, price });
+      await createNewCourse({ title, description, category, price });
       toast.success("Course created successfully");
       navigate("/instructor/courses");
     } catch (error) {

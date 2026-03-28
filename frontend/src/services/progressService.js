@@ -8,6 +8,10 @@ export const getMyProgress = () => {
   return API.get("/progress/my-progress");
 };
 
-export const getLessons = (courseId) => {
-  return API.get(`/lessons/${courseId}`);
+export const getStudents = () => {
+  return API.get("/instructor/students");
+};
+
+export const getStudentsList = () => {
+  return API.get("/instructor/students-list");
 };

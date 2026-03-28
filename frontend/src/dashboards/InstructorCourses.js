@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table, Button } from "react-bootstrap";
-import API from "../services/api";
+import { getInstructorCourses, deleteCourseById } from "../services/courseService";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Loader from "../components/Loader";
@@ -12,7 +12,7 @@ function InstructorCourses() {
     const loadCourses = async () => {
         try {
             setLoading(true);
-            const res = await API.get("/courses/instructor/my-courses");
+            const res = await getInstructorCourses();
             setCourses(res.data);
         } catch (error) {
             toast.error(error?.response?.data?.message || "Error loading courses");
@@ -26,7 +26,7 @@ function InstructorCourses() {
         if (!window.confirm("Are you sure you want to delete this course?")) return;
         try {
             setLoading(true);
-            await API.delete(`/courses/${id}`);
+            await deleteCourseById(id);
             toast.success("Course deleted");
             await loadCourses();
         } catch (error) {

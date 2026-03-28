@@ -2,7 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { Container, Card, Row, Col, ProgressBar, Table, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import API from "../services/api";
+import { getMyProgress } from "../services/progressService";
+import { getAllCourses } from "../services/courseService";
+import { getStudents } from "../services/progressService";
+import { getAllUsers } from "../services/userService";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import Loader from "../components/Loader";
 
@@ -33,7 +36,7 @@ function Profile() {
       setLoading(true);
       try {
         if (user.role === "student") {
-          const res = await API.get("/progress/my-progress");
+          const res = await getMyProgress();
           const data = res.data;
           setCourses(data);
 
@@ -56,8 +59,8 @@ function Profile() {
 
         else if (user.role === "instructor") {
           const [coursesRes, studentsRes] = await Promise.all([
-            API.get("/courses"),
-            API.get("/instructor/students"),
+            getAllCourses(),
+            getStudents(),
           ]);
 
           const myCourses = coursesRes.data.filter(
@@ -70,8 +73,8 @@ function Profile() {
 
         else if (user.role === "admin") {
           const [usersRes, coursesRes] = await Promise.all([
-            API.get("/users"),
-            API.get("/courses"),
+            getAllUsers(),
+            getAllCourses(),
           ]);
 
           setUsersCount(usersRes.data.length);

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-import { updateLesson } from "../services/courseService";
-import API from "../services/api";
+import { getLessonById, updateLessonById } from "../services/lessonService";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
@@ -18,17 +17,16 @@ function EditLesson() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        loadLesson();
+        loadLesson(id);
     }, [id]);
 
-    const loadLesson = async () => {
+    const loadLesson = async (id) => {
         try {
             setLoading(true);
-            const res = await API.get(`/lessons/lesson/${id}`);
+            const res = await getLessonById(id);
             setTitle(res.data.title);
             setDescription(res.data.description);
             setVideoUrl(res.data.videoUrl);
-            setLoading(false);
         } catch (error) {
             toast.error(error?.response?.data?.message || "Error Loading lesson");
         } finally {
@@ -40,7 +38,7 @@ function EditLesson() {
         e.preventDefault();
         try { 
             setLoading(true);
-            await updateLesson(id, { title, description, videoUrl });
+            await updateLessonById(id, { title, description, videoUrl });
             toast.success("Lesson updated");
             navigate(-1);
         } catch (error) {

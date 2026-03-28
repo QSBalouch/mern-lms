@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { getCourses, enrollCourse, myCourses } from "../services/courseService";
+import { getAllCourses, enrollInCourse, myCourses, deleteCourseById } from "../services/courseService";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import Loader from "../components/Loader";
-import { deleteCourse } from "../services/courseService";
 
 function Courses() {
 
@@ -17,7 +16,7 @@ function Courses() {
   const loadCourses = async () => {
     try {
       setLoading(true);
-      const res = await getCourses();
+      const res = await getAllCourses();
       if (user?.role === "instructor") {
         const myCourses = res.data.filter(c => c.instructor._id === user._id);
         setCourses(myCourses);
@@ -54,7 +53,7 @@ function Courses() {
   const handleEnroll = async (id) => {
     try {
       setLoading(true);
-      await enrollCourse(id);
+      await enrollInCourse(id);
       loadMyCourses();
       toast.success("Enrolled successfully!");
     } catch (error) {
@@ -68,7 +67,7 @@ function Courses() {
     if (!window.confirm("Are you sure you want to delete this course?")) return;
     try {
       setLoading(true);
-      await deleteCourse(id);
+      await deleteCourseById(id);
       toast.success("Course deleted by admin");
       loadCourses();
     } catch (error) {

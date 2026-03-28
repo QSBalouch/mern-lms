@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import API from "../services/api";
-import { Container, Button, Card } from "react-bootstrap";
-import { myCourses } from "../services/courseService";
-import { toast } from "react-toastify";
+import { getCourseById, myCourses } from "../services/courseService";
+import { getAllLessons, deleteLessonById } from "../services/lessonService";
 import { markLessonComplete } from "../services/progressService";
+import { Container, Button, Card } from "react-bootstrap";
+import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 
 function CourseDetail() {
@@ -27,7 +27,7 @@ function CourseDetail() {
   const loadCourse = async () => {
     try {
       setLoading(true);
-      const res = await API.get(`/courses/${id}`);
+      const res = await getCourseById(id);
       setCourse(res.data);
     } catch (err) {
       toast.error(err.response?.data?.message || "Error loading course");
@@ -40,7 +40,7 @@ function CourseDetail() {
   const loadLessons = async () => {
     try {
       setLoading(true);
-      const res = await API.get(`/lessons/${id}`);
+      const res = await getAllLessons(id);
       setLessons(res.data);
     } catch (err) {
       toast.error(err.response?.data?.message || "Error loading lessons");
@@ -53,7 +53,7 @@ function CourseDetail() {
     if (!window.confirm("Are you sure you want to delete this lesson?")) return;
     try {
       setLoading(true);
-      await API.delete(`/lessons/${id}`); 
+      await deleteLessonById(id); 
       toast.success("Lesson deleted");
       await loadLessons();
     } catch (error) {

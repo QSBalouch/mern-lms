@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import API from "../services/api";
+import { getStudentsList } from "../services/progressService";
 import Loader from "../components/Loader";
 
 function InstructorStudents() {
@@ -9,7 +9,7 @@ function InstructorStudents() {
 
   useEffect(() => {
     setLoading(true);
-    API.get("/instructor/students-list")
+    getStudentsList()
       .then((res) => setStudents(res.data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));

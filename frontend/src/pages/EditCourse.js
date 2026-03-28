@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-import { getCourse, updateCourse } from "../services/courseService";
+import { getCourseById, updateCourseById } from "../services/courseService";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
@@ -23,7 +23,7 @@ function EditCourse() {
     const loadCourse = async () => {
         try {
             setLoading(true);
-            const res = await getCourse(id);
+            const res = await getCourseById(id);
             setTitle(res.data.title);
             setDescription(res.data.description);
             setCategory(res.data.category);
@@ -39,7 +39,7 @@ function EditCourse() {
         e.preventDefault();
         try {
             setLoading(true);
-            await updateCourse(id, { title, description, category, price });
+            await updateCourseById(id, { title, description, category, price });
             toast.success("Course updated");
             navigate("/instructor/courses");
         } catch (error) {

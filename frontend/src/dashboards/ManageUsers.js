@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table, Button } from "react-bootstrap";
-import API from "../services/api";
+import { getAllUsers, deleteUserById } from "../services/userService";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 
@@ -11,7 +11,7 @@ function ManageUsers() {
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const res = await API.get("/users");
+      const res = await getAllUsers();
       setUsers(res.data);
     } catch (error) {
       toast.error(error?.response?.data?.message || "Error loading users");
@@ -25,7 +25,7 @@ function ManageUsers() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
       setLoading(true);
-      await API.delete(`/users/${id}`);
+      await deleteUserById(id);
       toast.success("User deleted");
       await loadUsers();
     } catch (error) {
